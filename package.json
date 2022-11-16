@@ -22,10 +22,12 @@
     "*.{vue,js,ts}": "eslint --fix"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "axios": "^0.27.2",
     "axios-jsonp": "^1.0.4",
     "axios-retry": "^3.3.1",
     "echarts": "^5.4.0",
+    "element-plus": "^2.2.21",
     "mockjs": "^1.1.0",
     "pinia": "2.0.16",
     "pinia-plugin-persist": "^1.0.0",

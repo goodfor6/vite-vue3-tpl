@@ -1,98 +1,79 @@
-
+<!-- 消息页面 -->
 
 <template>
-  <div id="app">
-    <div id="main" style="width: 600px;height:400px;"></div>
+  <div v-show="authStore.checkAuth('Person')">
+    <common-breadcrumb />
+    <div class="content-container">
+      <div class="title flex">
+        <div>消息列表</div>
+      </div>
+
+      <div class="table-box">
+        <el-table ref="msgTableRef" v-loading="loading" :data="info.list"
+          :default-sort="{ prop: 'bornTimestamp', order: 'descending' }" border>
+
+          <el-table-column type="selection" width="50" />
+          <el-table-column prop="queueId" label="队列id" />
+
+          <el-table-cloumn prop="操作" width="220">
+            <template #default="{ row }">
+              <div>查看</div>
+            </template>
+          </el-table-cloumn>
+
+
+        </el-table>
+        <div class="pagination flex">
+          <el-pagination v-model:currentPage="pageNum" v-model:page-size="[10, 20, 30, 40]" :background="true"
+            layout="total,sizes,prev,pager,next,jumper" :total="info.total" @size-change="handleSizeChange">
+            </el>
+        </div>
+      </div>
+      <MsgForm></MsgForm>
+    </div>
+
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" steup>
+import api from '@/api'
+import MsgForm from './components/msgForm.vue'
+import type {Msg} from '@/types/msg_manage/msg'
+import msgTable from '@/hooks/msgTable'
+import msgApi from './hooks/msgApi'
+// import { Search } from '@element-plus/icons-vue'
 
-// export default {
-//   name : 'rocket',
-//   methods :{
-//     drawGraph(){
-//       var chartDom = document.getElementById('main');
-//       var myChart =  this.$echarts.init(chartDom);
-//       var option;
+const personTableRef = ref()
+let search = ref('')
+let showForm = ref(false)
+let formData = reactive<Partial<MsgFormData>>({
+  status:'1'
+})
+let updateUid = ref<number>(-1)
 
-//        option = {
-//         xAxis: {
-//           type: 'category',
-//           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-//         },
-//         yAxis: {
-//           type: 'value'
-//         },
-//         series: [
-//           {
-//             data: [120, 200, 150, 80, 70, 110, 130],
-//             type: 'bar',
-//             showBackground: true,
-//             backgroundStyle: {
-//               color: 'rgba(180, 180, 180, 0.2)'
-//             }
-//           }
-//         ]
-//       };
+provide('showForm',showForm)
+provide('formData',formData)
+provide('updateUid',updateUid)
 
-//        myChart.setOption(option);
-//     }
-//   },
-//   mounted (){
-//     this.drawGraph();
-//   }
-// };
+const {pageNum,pageSize,handleSizeChange,handleCurrentChange,info,updateList,searchHandle} = useTable(getList)
+provide('updateList',updateList)
 
+watch(search,(newV)=>{
+  const searchVal = {
+    userName: newV
+  }
+  searchHandle(searchVal)
+})
 
-// 螺旋图
+function showDetail(row:Msg){
+  formData.queueId= row.queueId
 
-type EChartsOption = echarts.EChartsOption;
-
-export default {
-    methods : {
-      drapGraph(){
-        var chartDom = document.getElementById('main')!;
-        var myChart = this.$echarts.init(chartDom);
-        var option: EChartsOption;
-
-        option = {
-          title: [
-            {
-              text: 'Tangential Polar Bar Label Position (middle)'
-            }
-          ],
-          polar: {
-            radius: [30, '80%']
-          },
-          angleAxis: {
-            max: 4,
-            startAngle: 75
-          },
-          radiusAxis: {
-            type: 'category',
-            data: ['a', 'b', 'c', 'd']
-          },
-          tooltip: {},
-          series: {
-            type: 'bar',
-            data: [2, 1.2, 2.4, 3.6],
-            coordinateSystem: 'polar',
-            label: {
-              show: true,
-              position: 'middle', // or 'start', 'insideStart', 'end', 'insideEnd'
-              formatter: '{b}: {c}'
-            }
-          }
-        };
-        option && myChart.setOption(option);
-      }
-    },
-    mounted(){
-      this.drapGraph();
-    }
+  updateUid.value = row.queueId
 }
 
 
 
 </script>
+<style scoped lang='scss'>
+@import url('@/scss/table.scss');
+</style>

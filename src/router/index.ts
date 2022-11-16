@@ -6,7 +6,7 @@ import {
 
 import Home from '@/views/Home/index.vue'
 import Other from '@/views/Other/index.vue'
-import Rocket from '@/views/Rocket/index.vue'
+import Rocket from '@/views/Rocket/componets/index.vue'
 import beforeEach from './guard/beforeEach'
 
 const routes: Array<RouteRecordRaw> = [
