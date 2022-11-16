@@ -6,7 +6,7 @@ import {
 
 import Home from '@/views/Home/index.vue'
 import Other from '@/views/Other/index.vue'
-
+import Rocket from '@/views/Rocket/index.vue'
 import beforeEach from './guard/beforeEach'
 
 const routes: Array<RouteRecordRaw> = [
@@ -29,6 +29,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/other',
     name: 'Other',
     component: Other,
+    meta: {
+      keepAlive: false
+    }
+  }
+  ,
+  {
+    path: '/rocket',
+    name: 'Rocket',
+    component: Rocket,
     meta: {
       keepAlive: false
     }
